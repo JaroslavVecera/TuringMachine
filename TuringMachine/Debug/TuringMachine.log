@@ -1,0 +1,18 @@
+﻿  main.c
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(3): warning C4067: Po direktivě preprocesoru byly neočekávané tokeny – očekával se nový řádek.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(4): warning C4067: Po direktivě preprocesoru byly neočekávané tokeny – očekával se nový řádek.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(210): warning C4133: =: nekompatibilní typy – z: state * na: stateNode *
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(234): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(254): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(350): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(353): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(363): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(378): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(385): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(409): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(412): warning C4047: return: char se liší od: void * úrovněmi indirekce.
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(559): warning C4133: funkce: nekompatibilní typy – z: char * na: FILE *
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(567): warning C4133: funkce: nekompatibilní typy – z: char * na: FILE *
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(576): warning C4133: funkce: nekompatibilní typy – z: char * na: FILE *
+c:\users\lenovo\source\repos\turingmachine\turingmachine\main.c(130): warning C4715: newState: ne všechny cesty k ovládacím prvkům vrací hodnotu
+  TuringMachine.vcxproj -> C:\Users\Lenovo\source\repos\TuringMachine\Debug\TuringMachine.exe
