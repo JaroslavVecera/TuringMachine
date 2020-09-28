@@ -37,7 +37,7 @@ typedef struct nodePool {
 
 typedef struct rule {
 	char read;
-	struct state* to;
+	char to;
 	char write;
 	direction direction;
 } rule;
@@ -102,7 +102,7 @@ nodePool* newNodePool(unsigned int size) {
 	return res;
 }
 
-rule* newRule(char read, state* to, char write, direction direction) {
+rule* newRule(char read, char to, char write, direction direction) {
 	rule* res = (rule*)malloc(sizeof(rule));
 	if (!res)
 		return NULL;
@@ -258,9 +258,26 @@ char moveRight(tape *t) {
 	return 1;
 }
 
+stateNode *findStateNode(stateBatch *b, char name) {
+	stateNode *curr = b->root;
+	while (curr) {
+		if (curr->name == name)
+			return curr;
+		curr = curr->next;
+	}
+	return NULL;
+}
+
+state *findState(stateBatch *b, char name) {
+	stateNode *n = findStateNode(b, name);
+	if (!n)
+		return NULL;
+	return n->state;
+}
+
 char applyRule(rule *r, tape *t, stateBatch *b) {
 	t->pointer->val = r->write;
-	b->current = r->to;
+	b->current = findState(b, r->to);
 	char success = 1;
 	if (r->direction == left)
 		success = moveLeft(t);
@@ -327,23 +344,6 @@ char run(tape *t, stateBatch *b) {
 	return 1;
 }
 
-stateNode *findStateNode(stateBatch *b, char name) {
-	stateNode *curr = b->root;
-	while (curr) {
-		if (curr->name == name)
-			return curr;
-		curr = curr->next;
-	}
-	return NULL;
-}
-
-state *findState(stateBatch *b, char name) {
-	stateNode *n = findStateNode(b, name);
-	if (!n)
-		return NULL;
-	return n->state;
-}
-
 char addState(stateBatch *b, char name) {
 	state *s = newState();
 	if (!s)
@@ -377,13 +377,11 @@ char addRecord(stateBatch *b, char from_state, char to_state, char read, char wr
 	if (!succes)
 		return NULL;
 	state *to = findState(b, to_state);
-	if (!to) {
+	if (!to)
 		succes = addState(b, to_state);
-		to = findState(b, to_state);
-	}
 	if (!succes)
 		return NULL;
-	rule *r = newRule(read, to, write, dir);
+	rule *r = newRule(read, to_state, write, dir);
 	return addRule(from, r);
 }
 
