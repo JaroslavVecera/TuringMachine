@@ -60,7 +60,7 @@ typedef struct stateNode {
 typedef struct stateBatch {
 	stateNode *root;
 	stateNode *finRoot;
-	state *current;
+	stateNode *current;
 } stateBatch;
 
 nodePool* pool;
@@ -277,7 +277,7 @@ state *findState(stateBatch *b, char name) {
 
 char applyRule(rule *r, tape *t, stateBatch *b) {
 	t->pointer->val = r->write;
-	b->current = findState(b, r->to);
+	b->current = findStateNode(b, r->to);
 	char success = 1;
 	if (r->direction == left)
 		success = moveLeft(t);
@@ -290,7 +290,7 @@ rule * findRule(tape *t, stateBatch *b) {
 	char c = t->pointer->val;
 	if (!b->current)
 		return NULL;
-	ruleNode *cRule = b->current->root;
+	ruleNode *cRule = b->current->state->root;
 	rule *rule = NULL;
 	while (cRule) {
 		if (cRule->rule->read == c) {
@@ -305,7 +305,7 @@ rule * findRule(tape *t, stateBatch *b) {
 char isFinalState(stateBatch *b) {
 	stateNode *c = b->finRoot;
 	while (c) {
-		if (b->current == c->state)
+		if (b->current->state == c->state)
 			return 1;
 		c = c->next;
 	}
@@ -324,6 +324,27 @@ transitionResult makeTransition(tape *t, stateBatch *b) {
 	return cont;
 }
 
+node *leftMostChar(tape *t) {
+	node *lm = t->pointer;
+	while (lm->prev) {
+		lm = lm->prev;
+	}
+	return lm;
+}
+
+void printConfiguration(char currState, tape *t) {
+	printf("\t");
+	node *iterator = leftMostChar(t);
+	for (; iterator != t->pointer; iterator = iterator->next) {
+		printf("%c", iterator->val);
+	}
+	printf(" %c ", currState);
+	for (; iterator->next; iterator = iterator->next) {
+		printf("%c", iterator->val);
+	}
+	printf("\n");
+}
+
 char run(tape *t, stateBatch *b) {
 	if (isFinalState(b)) {
 		printf("Result: accept\n");
@@ -332,15 +353,16 @@ char run(tape *t, stateBatch *b) {
 	transitionResult res = cont;
 	while (res == cont) {
 		res = makeTransition(t, b);
+		printConfiguration(b->current->name, t);
 	}
 	if (res == error) {
 		printf("error\n");
 		return 0;
 	}
 	if (res == accept)
-		printf("Result: accept\n");
+		printf("\nResult: accept\n");
 	else
-		printf("Result: reject\n");
+		printf("\nResult: reject\n");
 	return 1;
 }
 
@@ -386,11 +408,11 @@ char addRecord(stateBatch *b, char from_state, char to_state, char read, char wr
 }
 
 char addInitialState(stateBatch *b, char name) {
-	state *s = findState(b, name);
+	stateNode *s = findStateNode(b, name);
 	char success = 1;
 	if (!s) {
 		success = addState(b, name);
-		s = findState(b, name);
+		s = findStateNode(b, name);
 	}
 	b->current = s;
 	return success;
@@ -594,6 +616,8 @@ int main(int argc, char *argv[]) {
 			scanf("%c", &v);
 			break;
 		}
+		printf("Configurations:\n");
+		printConfiguration(b->current->name, t);
 		if (!run(t, b))
 			break;
 		if (!addInitialState(b, '0')) {
