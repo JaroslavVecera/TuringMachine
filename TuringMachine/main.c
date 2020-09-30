@@ -234,6 +234,7 @@ char moveLeft(tape *t) {
 		return NULL;
 	leftOpt(&c);
 	left->next = c;
+	c->prev = left;
 	t->pointer = left;
 	return 1;
 }
@@ -254,6 +255,7 @@ char moveRight(tape *t) {
 		return NULL;
 	rightOpt(&c);
 	right->prev = c;
+	c->next = right;
 	t->pointer = right;
 	return 1;
 }
@@ -562,6 +564,8 @@ char processFile(stateBatch *b, FILE *f) {
 }
 
 int main(int argc, char *argv[]) {
+	argc = 2;
+	argv[1] = "C:\\Users\\Lenovo\\source\\repos\\TuringMachine\\Debug\\double-input.txt";
 	char v;
 	if (argc < 2) {
 		printf("Error, none .tm file is given.");
